@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Function to fetch recipes based on ingredients
 export const fetchRecipesByIngredients = async (ingredients) => {
-    const url = `http://localhost:3000/?ingredients=${ingredients}`; // Replace with your actual API endpoint
+    const url = `https://app-backend-puce.vercel.app/?ingredients=${ingredients}`; // Replace with your actual API endpoint
 
     try {
         const response = await axios.get(url);
@@ -14,7 +14,7 @@ export const fetchRecipesByIngredients = async (ingredients) => {
     }
 };
 export  const fetchRecipesByComplexSearch = async (ingredients,maxProtein,maxCarbs) => {
-    const url = `http://localhost:3000/?includeIngredients=${ingredients}&maxProtein=${maxProtein}&maxCarbs=${maxCarbs}`; // Replace with your actual API endpoint
+    const url = `https://app-backend-puce.vercel.app/?includeIngredients=${ingredients}&maxProtein=${maxProtein}&maxCarbs=${maxCarbs}`; // Replace with your actual API endpoint
 
     try {
         const response = await axios.get(url);
