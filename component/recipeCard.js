@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import {View, Text, Image, StyleSheet, Button} from 'react-native';
 
-const RecipeCard = ({ recipe }) => {
+const RecipeCard = ({ recipe,clickEvent }) => {
     return (
         <View style={styles.card}>
             <Image source={{ uri: recipe.image }} style={styles.image} />
             <View style={styles.infoContainer}>
                 <Text style={styles.title}>{recipe.title}</Text>
             </View>
+            <Button title="Show More" onPress={() => clickEvent(recipe.id)} />
         </View>
     );
 };

@@ -1,13 +1,15 @@
-import { Text, SafeAreaView, StyleSheet,View,FlatList,ScrollView} from 'react-native';
+import {Text, SafeAreaView, StyleSheet, View, FlatList, ScrollView, Button} from 'react-native';
 import React,{useState,useEffect} from 'react';
-import {fetchRecipesByComplexSearch, fetchRecipesByIngredients} from '../service/fetchRecipes';
+import {fetchRecipesByComplexSearch, fetchRecipesByIngredients,fetchRecipeById} from '../service/fetchRecipes';
 import RecipeCard from "./recipeCard";
 import {calculateCarbsByProtein, calculateProteinByCarbs} from "../helper/calculatePercent";
 import IngredientInput from "./IngredientInput";
+import RecipeDetail from "./RecipeDetail";
 
 
 export default function Home() {
     const [recipes,setRecipes] = useState(null);
+    const [recipe,setRecipe] = useState(null);
     const handleSubmission = (ingredient, maxCarbs) => {
         // Here you can handle the submitted data, e.g., make an API call
         let maxProtein = calculateProteinByCarbs(maxCarbs);
@@ -22,21 +24,43 @@ export default function Home() {
             .catch(console.error);
     };
 
+    const clickHandler = (id) => {
+        if(id){
+            fetchRecipeById(id)
+                .then(recipe => {
+                    console.log("recipe",recipe)
+                    if(recipe){
+                        setRecipe(recipe);
+                    }
+
+                })
+                .catch(console.error);
+        }
+    }
+
+    const backHandler = () => {
+        setRecipe(null);
+    }
+    const backToSearch = () => {
+        setRecipes(null);
+    }
 
     useEffect(() => {
 
     }, []);
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.header}>
-               All Recipes
-            </Text>
             <ScrollView style={styles.container}>
-                {recipes && recipes.length > 0 ? recipes.map((recipe) => {
+                { recipes && !recipe && <Text style={styles.header}>
+                    All Recipes
+                </Text>}
+                {recipes && recipes.length > 0 && !recipe ? recipes.map((recipe) => {
                     return (
-                        <RecipeCard recipe={recipe} key={recipe.id}/>
+                        <RecipeCard recipe={recipe} key={recipe.id} clickEvent={clickHandler}/>
                     )
-                }) : <IngredientInput onSubmit={handleSubmission} />}
+                }) : recipe? null: <IngredientInput onSubmit={handleSubmission} />}
+                {recipe && <RecipeDetail clickBack={backHandler} recipe={recipe}/>}
+                {!recipe && recipes && <Button title="Go Back" onPress={() => backToSearch()} />}
             </ScrollView>
         </SafeAreaView>
     );

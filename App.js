@@ -6,14 +6,39 @@ import {calculateCarbsByProtein, calculateProteinByCarbs} from "./helper/calcula
 import IngredientInput from "./component/IngredientInput";
 import { NavigationContainer } from '@react-navigation/native';
 import AppNavigator from './component/appNavigator';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Home from './component/home';
+import Recipe from "./component/recipe";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
+const Tab = createBottomTabNavigator();
+const myIcon = <Icon name="home" size={30} color="#900" />;
+
+function MyTabs() {
+  return (
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={Home} options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ }) => (
+              <Icon name="home" size={30} color="#900" />
+          ),
+        }} />
+        <Tab.Screen name="recipes" component={Recipe}  options={{
+          tabBarLabel: 'Recipes',
+          tabBarIcon: ({ }) => (
+              <Icon name="lemon-o" size={30} color="#900" />
+          ),
+        }}/>
+      </Tab.Navigator>
+  );
+}
 
 
 export default function App() {
 
   return (
       <NavigationContainer>
-          <AppNavigator />
+        <MyTabs />
       </NavigationContainer>
   );
 }
