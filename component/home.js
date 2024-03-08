@@ -1,15 +1,17 @@
 import {Text, SafeAreaView, StyleSheet, View, FlatList, ScrollView, Button} from 'react-native';
 import React,{useState,useEffect} from 'react';
-import {fetchRecipesByComplexSearch, fetchRecipesByIngredients,fetchRecipeById} from '../service/fetchRecipes';
+import {fetchRecipesByComplexSearch, fetchRecipesByIngredients, fetchRecipeById, fetchRecipeByRandom} from '../service/fetchRecipes';
 import RecipeCard from "./recipeCard";
 import {calculateCarbsByProtein, calculateProteinByCarbs} from "../helper/calculatePercent";
 import IngredientInput from "./IngredientInput";
 import RecipeDetail from "./RecipeDetail";
+import RecipeRandomComponent from "./randomRecipe";
 
 
 export default function Home() {
     const [recipes,setRecipes] = useState(null);
     const [recipe,setRecipe] = useState(null);
+    const [randomRecipe,setRandomRecipe] = useState(null);
     const handleSubmission = (ingredient, maxCarbs) => {
         // Here you can handle the submitted data, e.g., make an API call
         let maxProtein = calculateProteinByCarbs(maxCarbs);
@@ -46,7 +48,12 @@ export default function Home() {
     }
 
     useEffect(() => {
-
+        fetchRecipeByRandom().then(recipe => {
+            if (recipe && recipe.recipes && recipe.recipes.length > 0) {
+                console.log("recipe111", recipe)
+                setRandomRecipe(recipe.recipes[0]);
+            }
+        }).catch(console.error);
     }, []);
     return (
         <SafeAreaView style={styles.container}>
@@ -58,7 +65,9 @@ export default function Home() {
                     return (
                         <RecipeCard recipe={recipe} key={recipe.id} clickEvent={clickHandler}/>
                     )
-                }) : recipe? null: <IngredientInput onSubmit={handleSubmission} />}
+                }) : recipe? null:<> <IngredientInput onSubmit={handleSubmission} />{randomRecipe &&<><Text style={styles.header}>
+                   Daily Recipe
+                </Text> <RecipeRandomComponent recipe={randomRecipe}/></>}</>}
                 {recipe && <RecipeDetail clickBack={backHandler} recipe={recipe}/>}
                 {!recipe && recipes && <Button title="Go Back" onPress={() => backToSearch()} />}
             </ScrollView>
