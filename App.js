@@ -10,9 +10,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from './component/home';
 import Recipe from "./component/recipe";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AutoScrollingView from './component/AutoScrollingView';
 import RecipeRandomComponent from "./component/randomRecipe";
-import ScrollDownRevealText from "./component/ScrollDownRevealText";
 import FadeInScrollComponent from "./component/FadeInScrollComponent";
 
 const Tab = createBottomTabNavigator();
